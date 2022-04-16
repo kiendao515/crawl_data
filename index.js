@@ -3,6 +3,7 @@ const axios = require('axios');
 const { Telegraf } = require('telegraf');
 const bot = new Telegraf("5188469759:AAHSkx5VoZvobDknn_KxSfcqR6WAuMMEOg0");
 const playwright = require('playwright')
+// const { chromium } = require('playwright-core');
 const chromium = require('chrome-aws-lambda');
 const scrollElement = 'document.getElementsByClassName("oitems")[1]'
 const fs = require('fs');
@@ -75,7 +76,13 @@ async function crawlPage2() {
 
   // data la loot.farm
   let data = [];
-  let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
+  // let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
+  browser = await chromium.puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless,
+    ignoreHTTPSErrors: true,
+  })
   let page = await browser.newPage()
   await page.goto(urls[0])
   await page.waitForSelector(".itemwrap")
@@ -91,18 +98,28 @@ async function crawlPage2() {
         console.log(`Finished scrolling ${alias[urls[0]]}`)
         break
       } else {
-        throw (e)
+        data = await page.$$eval('.itemblock', (options) =>
+          options.map((option) => option.getAttribute('data-name') + "," + option.getAttribute('data-p') / 100))
+        let lootfarm = filterObject(analysisData(data));
+        console.log(lootfarm);
+        await browser.close();
       }
     }
   }
-  data = await page.$$eval('.itemblock', (options) =>
-    options.map((option) => option.getAttribute('data-name') + "," + option.getAttribute('data-p') / 100))
-  let lootfarm = filterObject(analysisData(data));
-  console.log(lootfarm);
-  await browser.close();
+  // data = await page.$$eval('.itemblock', (options) =>
+  //   options.map((option) => option.getAttribute('data-name') + "," + option.getAttribute('data-p') / 100))
+  // let lootfarm = filterObject(analysisData(data));
+  // console.log(lootfarm);
+  // await browser.close();
 
   // arr la tradeit
-  browser = await playwright.firefox.launch({ headless: false, slowMo: 0 })
+  // browser = await playwright.firefox.launch({ headless: false, slowMo: 0 })
+  browser = await chromium.puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless,
+    ignoreHTTPSErrors: true,
+  })
   page = await browser.newPage()
   await page.goto("https://old.tradeit.gg/")
   const response = await page.evaluate(async () => {
@@ -349,11 +366,11 @@ app.listen(process.env.PORT || 5000, (req, res) => {
 
 // app.use(extendTimeoutMiddleware);
 
-app.get('/',async(req,res)=>{
+app.get('/', async (req, res) => {
   console.log("hello");
   let id = await crawlPage2();
   console.log(id);
-  res.end('https://docs.google.com/spreadsheets/d/'+id)
+  res.end('https://docs.google.com/spreadsheets/d/' + id)
   // return res.json({status:'success',data:"hello"});
 })
 
