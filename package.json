@@ -1,0 +1,29 @@
+{
+  "name": "stocks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "stock.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Me",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.25.0",
+    "chrome-aws-lambda": "^10.1.0",
+    "exceljs": "^4.3.0",
+    "express": "^4.17.3",
+    "fs": "0.0.1-security",
+    "googleapis": "^100.0.0",
+    "http-delayed-response": "0.0.4",
+    "nodemon": "^2.0.15",
+    "playwright": "^1.20.2",
+    "puppeteer": "^13.5.2",
+    "request": "^2.88.2",
+    "telegraf": "^4.6.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.21.0"
+  }
+}
