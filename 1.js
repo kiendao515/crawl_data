@@ -79,7 +79,7 @@ async function crawlPage2() {
     let data = [];
     browser = await chromium.puppeteer.launch({
         args: chromium.args,
-        executablePath: await chromium.executablePath,
+        executablePath: '/usr/bin/chromium-browser',
         headless: chromium.headless,
         ignoreHTTPSErrors: true,
       });
