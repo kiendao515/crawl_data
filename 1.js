@@ -13,7 +13,7 @@ alias[urls[1]] = "URL2";
 var express = require('express');
 var app = express();
 // const { chromium } = require('playwright-core');
-const chromium= require('chrome-aws-lambda');
+const chromium = require('chrome-aws-lambda');
 
 let page3 = []
 const analysisData = (data) => {
@@ -77,8 +77,12 @@ async function crawlPage2() {
 
     // data la loot.farm
     let data = [];
-    
-   let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
+
+    //    let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
+    const browser = await puppeteer.launch({
+        headless: false,
+        args: ['--no-sandbox']
+    });
     // browser = await chromium.puppeteer.launch({
     //     args: chromium.args,
     //     executablePath: '/usr/bin/chromium-browser',

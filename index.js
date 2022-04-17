@@ -76,7 +76,9 @@ async function crawlPage2() {
 
   // data la loot.farm
   let data = [];
-  let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
+  const browser = await puppeteer.launch({ headless: true,
+    args: ['--no-sandbox']});
+  // let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
   // browser = await chromium.puppeteer.launch({
   //   args: chromium.args,
   //   executablePath: await chromium.executablePath,
@@ -113,7 +115,9 @@ async function crawlPage2() {
   // await browser.close();
 
   // arr la tradeit
-  browser = await playwright.firefox.launch({ headless: false, slowMo: 0 })
+  browser = await puppeteer.launch({ headless: true,
+    args: ['--no-sandbox']});
+  // browser = await playwright.firefox.launch({ headless: false, slowMo: 0 })
   // browser = await chromium.puppeteer.launch({
   //   args: chromium.args,
   //   executablePath: await chromium.executablePath,
