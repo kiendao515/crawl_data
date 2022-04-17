@@ -14,7 +14,7 @@ alias[urls[0]] = "URL1";
 alias[urls[1]] = "URL2";
 var express = require('express');
 var app = express();
-const puppeteer= reuiqre('puppeteer')
+const puppeteer= require('puppeteer')
 
 let page3 = []
 const analysisData = (data) => {
