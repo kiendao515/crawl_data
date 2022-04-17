@@ -76,17 +76,11 @@ async function crawlPage2() {
 
   // data la loot.farm
   let data = [];
+  let lootfarm;
   const browser = await puppeteer.launch({ headless: true,
     args: ['--no-sandbox'],slowMo:0});
-  // let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
-  // browser = await chromium.puppeteer.launch({
-  //   args: chromium.args,
-  //   executablePath: await chromium.executablePath,
-  //   headless: chromium.headless,
-  //   ignoreHTTPSErrors: true,
-  // })
   let page = await browser.newPage()
-  await page.goto(urls[0])
+  await page.goto(urls[0],{waitUntil:'domcontentloaded'})
   await page.waitForSelector(".itemwrap")
   let previousHeight
   while (true) {
@@ -102,28 +96,19 @@ async function crawlPage2() {
       } else {
         data = await page.$$eval('.itemblock', (options) =>
           options.map((option) => option.getAttribute('data-name') + "," + option.getAttribute('data-p') / 100))
-        let lootfarm = filterObject(analysisData(data));
+          lootfarm = filterObject(analysisData(data));
         console.log(lootfarm);
-        await browser.close();
+        break;
+        // await browser.close();
       }
     }
   }
-  // data = await page.$$eval('.itemblock', (options) =>
-  //   options.map((option) => option.getAttribute('data-name') + "," + option.getAttribute('data-p') / 100))
-  // let lootfarm = filterObject(analysisData(data));
-  // console.log(lootfarm);
-  // await browser.close();
+
 
   // arr la tradeit
-  browser = await puppeteer.launch({ headless: true,
-    args: ['--no-sandbox']});
-  // browser = await playwright.firefox.launch({ headless: false, slowMo: 0 })
-  // browser = await chromium.puppeteer.launch({
-  //   args: chromium.args,
-  //   executablePath: await chromium.executablePath,
-  //   headless: chromium.headless,
-  //   ignoreHTTPSErrors: true,
-  // })
+  // browser = await puppeteer.launch({ headless: true,
+  //   args: ['--no-sandbox']});
+
   page = await browser.newPage()
   await page.goto("https://old.tradeit.gg/")
   const response = await page.evaluate(async () => {

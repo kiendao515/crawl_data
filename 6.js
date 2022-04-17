@@ -115,28 +115,32 @@ async function crawlPage2() {
         }
     }
 
-
+    browser = await puppeteer.launch({
+      headless: false,
+      args: ['--no-sandbox'],
+      slowMo:0
+  });
     // // arr la tradeit
     // browser = await playwright.firefox.launch({ headless: false, slowMo: 0 })
-    // page = await browser.newPage()
-    // await page.goto("https://old.tradeit.gg/")
-    // const response = await page.evaluate(async () => {
-    //     return await fetch("https://inventory.tradeit.gg/sinv/730")
-    //         .then(r => r.ok ? r.json() : Promise.reject(r))
-    // })
-    // let arr = [];
-    // for (var i = 0; i < response.length; i++) {
-    //     for (var key in response[i]['730'].items) {
-    //         arr.push({
-    //             name: response[i]['730'].items[key].il.replace("https://tradeit.gg/csgo/store?search=", "") + check(response[i]['730'].items[key].e),
-    //             price: response[i]['730'].items[key].p / 100
-    //         });
-    //     }
-    // }
-    // // console.log(arr);
-    // let tradeit = filterObject(arr);
-    // console.log(tradeit);
-    // await browser.close();
+    page = await browser.newPage()
+    await page.goto("https://old.tradeit.gg/")
+    const response = await page.evaluate(async () => {
+        return await fetch("https://inventory.tradeit.gg/sinv/730")
+            .then(r => r.ok ? r.json() : Promise.reject(r))
+    })
+    let arr = [];
+    for (var i = 0; i < response.length; i++) {
+        for (var key in response[i]['730'].items) {
+            arr.push({
+                name: response[i]['730'].items[key].il.replace("https://tradeit.gg/csgo/store?search=", "") + check(response[i]['730'].items[key].e),
+                price: response[i]['730'].items[key].p / 100
+            });
+        }
+    }
+    // console.log(arr);
+    let tradeit = filterObject(arr);
+    console.log(tradeit);
+    await browser.close();
 
     // // xuat ra excel etofun vs loot.farm
     // // let lootData = analysisData(data);
