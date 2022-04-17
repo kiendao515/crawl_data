@@ -76,13 +76,13 @@ async function crawlPage2() {
 
   // data la loot.farm
   let data = [];
-  // let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
-  browser = await chromium.puppeteer.launch({
-    args: chromium.args,
-    executablePath: await chromium.executablePath,
-    headless: chromium.headless,
-    ignoreHTTPSErrors: true,
-  })
+  let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
+  // browser = await chromium.puppeteer.launch({
+  //   args: chromium.args,
+  //   executablePath: await chromium.executablePath,
+  //   headless: chromium.headless,
+  //   ignoreHTTPSErrors: true,
+  // })
   let page = await browser.newPage()
   await page.goto(urls[0])
   await page.waitForSelector(".itemwrap")
@@ -113,13 +113,13 @@ async function crawlPage2() {
   // await browser.close();
 
   // arr la tradeit
-  // browser = await playwright.firefox.launch({ headless: false, slowMo: 0 })
-  browser = await chromium.puppeteer.launch({
-    args: chromium.args,
-    executablePath: await chromium.executablePath,
-    headless: chromium.headless,
-    ignoreHTTPSErrors: true,
-  })
+  browser = await playwright.firefox.launch({ headless: false, slowMo: 0 })
+  // browser = await chromium.puppeteer.launch({
+  //   args: chromium.args,
+  //   executablePath: await chromium.executablePath,
+  //   headless: chromium.headless,
+  //   ignoreHTTPSErrors: true,
+  // })
   page = await browser.newPage()
   await page.goto("https://old.tradeit.gg/")
   const response = await page.evaluate(async () => {

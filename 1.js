@@ -77,12 +77,14 @@ async function crawlPage2() {
 
     // data la loot.farm
     let data = [];
-    browser = await chromium.puppeteer.launch({
-        args: chromium.args,
-        executablePath: '/usr/bin/chromium-browser',
-        headless: chromium.headless,
-        ignoreHTTPSErrors: true,
-      });
+    
+   let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
+    // browser = await chromium.puppeteer.launch({
+    //     args: chromium.args,
+    //     executablePath: '/usr/bin/chromium-browser',
+    //     headless: chromium.headless,
+    //     ignoreHTTPSErrors: true,
+    //   });
     let page = await browser.newPage()
     await page.goto(urls[0])
     await page.waitForSelector(".itemwrap")
