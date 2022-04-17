@@ -77,7 +77,7 @@ async function crawlPage2() {
   // data la loot.farm
   let data = [];
   const browser = await puppeteer.launch({ headless: true,
-    args: ['--no-sandbox']});
+    args: ['--no-sandbox'],slowMo:0});
   // let browser = await playwright.chromium.launch({ headless: false, slowMo: 0 })
   // browser = await chromium.puppeteer.launch({
   //   args: chromium.args,
