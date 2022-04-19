@@ -2,9 +2,6 @@ const ExcelJS = require('exceljs');
 const axios = require('axios');
 const { Telegraf } = require('telegraf');
 const bot = new Telegraf("5188469759:AAHSkx5VoZvobDknn_KxSfcqR6WAuMMEOg0");
-const playwright = require('playwright')
-// const { chromium } = require('playwright-core');
-const chromium = require('chrome-aws-lambda');
 const scrollElement = 'document.getElementsByClassName("oitems")[1]'
 const fs = require('fs');
 const { google } = require('googleapis');
@@ -14,7 +11,7 @@ alias[urls[0]] = "URL1";
 alias[urls[1]] = "URL2";
 var express = require('express');
 var app = express();
-const puppeteer= require('puppeteer')
+const puppeteer = require('puppeteer')
 
 let page3 = []
 const analysisData = (data) => {
@@ -76,11 +73,12 @@ async function crawlPage2() {
 
   // data la loot.farm
   let data = [];
-  let lootfarm;
-  const browser = await puppeteer.launch({ headless: true,
-    args: ['--no-sandbox'],slowMo:0});
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox'], slowMo: 0
+  });
   let page = await browser.newPage()
-  await page.goto(urls[0],{waitUntil:'domcontentloaded'})
+  await page.goto(urls[0], { waitUntil: 'domcontentloaded' })
   await page.waitForSelector(".itemwrap")
   let previousHeight
   while (true) {
@@ -90,25 +88,23 @@ async function crawlPage2() {
       await page.evaluate(`${scrollElement}.scrollTo(0, ${scrollElement}.scrollHeight)`)
       await page.waitForFunction(`${scrollElement}.scrollHeight > ${previousHeight}`, 69, { timeout: 30000 })
     } catch (e) {
-      if (e instanceof playwright.errors.TimeoutError) {
+      if (e) {
         console.log(`Finished scrolling ${alias[urls[0]]}`)
         break
       } else {
-        data = await page.$$eval('.itemblock', (options) =>
-          options.map((option) => option.getAttribute('data-name') + "," + option.getAttribute('data-p') / 100))
-          lootfarm = filterObject(analysisData(data));
-        console.log(lootfarm);
+        // data = await page.$$eval('.itemblock', (options) =>
+        //   options.map((option) => option.getAttribute('data-name') + "," + option.getAttribute('data-p') / 100))
+        //   lootfarm = filterObject(analysisData(data));
+        // console.log(lootfarm);
         break;
         // await browser.close();
       }
     }
   }
-
-
-  // arr la tradeit
-  // browser = await puppeteer.launch({ headless: true,
-  //   args: ['--no-sandbox']});
-
+  data = await page.$$eval('.itemblock', (options) =>
+    options.map((option) => option.getAttribute('data-name') + "," + option.getAttribute('data-p') / 100))
+  let lootfarm = filterObject(analysisData(data));
+  console.log(lootfarm);
   page = await browser.newPage()
   await page.goto("https://old.tradeit.gg/")
   const response = await page.evaluate(async () => {
@@ -293,7 +289,7 @@ async function crawlPage2() {
 // crawlPage2()
 
 
-app.listen(process.env.PORT || 8000, (req, res) => {
+app.listen(process.env.PORT || 5000, (req, res) => {
   console.log("server chay o port 9000");
 })
 
@@ -301,59 +297,59 @@ app.listen(process.env.PORT || 8000, (req, res) => {
 //   var delayed = new DelayedResponse(req, res);
 //   slowFunction(delayed.wait());
 // });
-// const extendTimeoutMiddleware = (req, res, next) => {
-//   const space = ' ';
-//   let isFinished = false;
-//   let isDataSent = false;
+const extendTimeoutMiddleware = (req, res, next) => {
+  const space = ' ';
+  let isFinished = false;
+  let isDataSent = false;
 
-//   // Only extend the timeout for API requests
-//   if (!req.url.includes('/')) {
-//     next();
-//     return;
-//   }
+  // Only extend the timeout for API requests
+  if (!req.url.includes('/')) {
+    next();
+    return;
+  }
 
-//   res.once('finish', () => {
-//     isFinished = true;
-//   });
+  res.once('finish', () => {
+    isFinished = true;
+  });
 
-//   res.once('end', () => {
-//     isFinished = true;
-//   });
+  res.once('end', () => {
+    isFinished = true;
+  });
 
-//   res.once('close', () => {
-//     isFinished = true;
-//   });
+  res.once('close', () => {
+    isFinished = true;
+  });
 
-//   res.on('data', (data) => {
-//     // Look for something other than our blank space to indicate that real
-//     // data is now being sent back to the client.
-//     if (data !== space) {
-//       isDataSent = true;
-//     }
-//   });
+  res.on('data', (data) => {
+    // Look for something other than our blank space to indicate that real
+    // data is now being sent back to the client.
+    if (data !== space) {
+      isDataSent = true;
+    }
+  });
 
-//   const waitAndSend = () => {
-//     setTimeout(() => {
-//       // If the response hasn't finished and hasn't sent any data back....
-//       if (!isFinished && !isDataSent) {
-//         // Need to write the status code/headers if they haven't been sent yet.
-//         if (!res.headersSent) {
-//           res.writeHead(202);
-//         }
+  const waitAndSend = () => {
+    setTimeout(() => {
+      // If the response hasn't finished and hasn't sent any data back....
+      if (!isFinished && !isDataSent) {
+        // Need to write the status code/headers if they haven't been sent yet.
+        if (!res.headersSent) {
+          res.writeHead(202);
+        }
 
-//         res.write(space);
+        res.write(space);
 
-//         // Wait another 15 seconds
-//         waitAndSend();
-//       }
-//     }, 15000);
-//   };
+        // Wait another 15 seconds
+        waitAndSend();
+      }
+    }, 15000);
+  };
 
-//   waitAndSend();
-//   next();
-// };
+  waitAndSend();
+  next();
+};
 
-// app.use(extendTimeoutMiddleware);
+app.use(extendTimeoutMiddleware);
 
 app.get('/', async (req, res) => {
   console.log("hello");
